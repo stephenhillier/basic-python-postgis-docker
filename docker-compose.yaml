@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  backend: 
+    build: 
+      context: api
+      args: 
+        env: dev
+    command: /app/start-reload.sh
+    volumes:
+      - ./api:/app
+    environment:
+      - POSTGRES_PASSWD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_SERVER=db:5432
+      - POSTGRES_DB=postgres
+    ports:
+      - '8000:8000'
+    depends_on: 
+      - db
+  db:
+    image: geographica/postgis:dev_diplodocus
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/data
+    environment:
+      - POSTGRES_PASSWD=postgres
+volumes:
+  db-data:
